@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<phpunit bootstrap = "vendor/autoload.php">
+
+    <testsuites>
+        <testsuite name="services">
+            <directory>tests/services</directory>
+        </testsuite>
+    </testsuites>
+    <coverage>
+        <include>
+            <directory suffix="Test.php">/tests</directory>
+        </include>
+    </coverage>
+
+</phpunit>

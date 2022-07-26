@@ -1,0 +1,14 @@
+{
+  "name": "robledocampos/api-request",
+  "autoload": {
+    "classmap": [
+      "app/"
+    ]
+  },
+  "require": {
+    "ext-curl": "^7.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9"
+  }
+}
