@@ -8,7 +8,7 @@ use Phalcon\Http\Request;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+const APP_PATH = BASE_PATH . '/app';
 
 // Register an autoloader
 $loader = new Loader();

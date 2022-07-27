@@ -5,16 +5,18 @@ class RequestService
 {
     private string $basePath;
     private bool $ssl;
+    private Array $headers;
     private $curl;
     private string $endpoint;
     private string $queryString;
 
-    const REQUEST_METHODS = ["POST", "GET", "PUT", "DELETE", "PATCH"];
+    const REQUEST_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"];
 
     public function __construct(string $basePath, bool $ssl = false)
     {
         $this->basePath = $basePath;
         $this->ssl = $ssl;
+        $this->headers = [];
         $this->endpoint = "";
         $this->queryString = "";
         $this->curl = curl_init();
@@ -26,24 +28,29 @@ class RequestService
         curl_setopt($this->curl, CURLOPT_URL, $this->mountUrl());
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
         curl_setopt($this->curl, CURLOPT_HEADER, 1);
         $curlResult = curl_exec($this->curl);
         $httpCode = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
         $headerSize = curl_getinfo($this->curl, CURLINFO_HEADER_SIZE);
         $header = substr($curlResult, 0, $headerSize);
         $body = substr($curlResult, $headerSize);
-        $result['httpCode'] = $httpCode;
-        $result['header'] = $this::getCurlHeaders($header);
+        $result['status_code'] = $httpCode;
+        $result['headers'] = $this::getCurlHeaders($header);
         $result['body'] = $body;
         curl_close($this->curl);
 
         return $result;
     }
 
+    public function getHeaders() : Array
+    {
+        return $this->headers;
+    }
 
     public function setHeaders(Array $headers) : void
     {
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, $headers);
+        $this->headers = $headers;
     }
 
     public function setMethod(string $method) : void
@@ -66,9 +73,15 @@ class RequestService
         $this->queryString = "?".http_build_query($parameters, '', '&');
     }
 
-    public function setPayload(Array $payload) : void
+    public function setJsonPayload(Array $payload) : void
     {
-        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $payload);
+        $jsonPayload = json_encode($payload);
+        if (!$jsonPayload) {
+            throw new JsonEncodeException();
+        }
+        $headers = array_merge($this->getHeaders(), ['Content-Type: application/json']);
+        $this->setHeaders($headers);
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $jsonPayload);
     }
 
     private function mountUrl() : string
