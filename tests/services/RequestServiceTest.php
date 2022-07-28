@@ -14,7 +14,7 @@ class RequestServiceTest extends TestCase
 
     function testGetWithoutEndpoint()
     {
-        $result = $this->requestService->call();
+        $result = $this->requestService->make();
         $this->assertEquals(200, $result['status_code']);
         $this->assertNotEmpty($result['body']);
     }
@@ -22,7 +22,7 @@ class RequestServiceTest extends TestCase
     function testGetWithEndpoint()
     {
         $this->requestService->setEndpoint("/users/defunkt");
-        $result = $this->requestService->call();
+        $result = $this->requestService->make();
         $body = json_decode($result['body']);
         $this->assertEquals(200, $result['status_code']);
         $this->assertEquals("defunkt", $body->login);
@@ -33,7 +33,7 @@ class RequestServiceTest extends TestCase
         $this->requestService->setEndpoint("/users/defunkt");
         $this->requestService->setJsonPayload(['name' => "Jhon Doe"]);
         $this->requestService->setMethod("GET");
-        $result = $this->requestService->call();
+        $result = $this->requestService->make();
         $body = json_decode($result['body']);
         $this->assertEquals(200, $result['status_code']);
         $this->assertEquals("defunkt", $body->login);
@@ -43,7 +43,7 @@ class RequestServiceTest extends TestCase
     {
         $this->requestService->setEndpoint("/users/defunkt/repos");
         $this->requestService->setQueryString(['page' => 2, 'per_page' => 3]);
-        $result = $this->requestService->call();
+        $result = $this->requestService->make();
         $this->assertEquals(200, $result['status_code']);
         $this->assertNotEmpty($result['body']);
     }
@@ -52,7 +52,7 @@ class RequestServiceTest extends TestCase
     {
         $this->requestService->setEndpoint("/users/defunkt");
         $this->requestService->setMethod("POST");
-        $result = $this->requestService->call();
+        $result = $this->requestService->make();
         $this->assertEquals(404, $result['status_code']);
         $this->assertNotEmpty($result['body']);
     }

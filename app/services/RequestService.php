@@ -23,7 +23,7 @@ class RequestService
         if ($this->ssl) $this->setSsL();
     }
 
-    public function call() : Array
+    public function make() : Array
     {
         curl_setopt($this->curl, CURLOPT_URL, $this->mountUrl());
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
