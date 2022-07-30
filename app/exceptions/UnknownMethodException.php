@@ -1,5 +1,7 @@
 <?php
 
+namespace robledocampos\api_request\exceptions;
+
 
 class UnknownMethodException extends Exception
 {
