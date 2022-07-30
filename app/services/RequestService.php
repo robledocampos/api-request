@@ -7,7 +7,7 @@ class RequestService
 {
     private string $basePath;
     private bool $ssl;
-    private Array $headers;
+    private array $headers;
     private $curl;
     private string $endpoint;
     private string $queryString;
@@ -25,7 +25,7 @@ class RequestService
         if ($this->ssl) $this->setSsL();
     }
 
-    public function make() : Array
+    public function make() : array
     {
         curl_setopt($this->curl, CURLOPT_URL, $this->mountUrl());
         curl_setopt($this->curl, CURLOPT_FOLLOWLOCATION, 1);
@@ -45,12 +45,12 @@ class RequestService
         return $result;
     }
 
-    public function getHeaders() : Array
+    public function getHeaders() : array
     {
         return $this->headers;
     }
 
-    public function setHeaders(Array $headers) : void
+    public function setHeaders(array $headers) : void
     {
         $this->headers = $headers;
     }
@@ -70,12 +70,12 @@ class RequestService
         $this->endpoint = $endpoint;
     }
 
-    public function setQueryString(Array $parameters) : void
+    public function setQueryString(array $parameters) : void
     {
         $this->queryString = "?".http_build_query($parameters, '', '&');
     }
 
-    public function setJsonPayload(Array $payload) : void
+    public function setJsonPayload(array $payload) : void
     {
         $jsonPayload = json_encode($payload);
         if (!$jsonPayload) {
@@ -100,7 +100,7 @@ class RequestService
         curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, 2);
     }
 
-    private function getCurlHeaders($header) : Array
+    private function getCurlHeaders($header) : array
     {
         $headers = [];
         $lines = explode("\n",$header);
