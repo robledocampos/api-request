@@ -31,7 +31,7 @@ class RequestServiceTest extends TestCase
     function testGetWithPayload()
     {
         $this->requestService->setEndpoint("/users/defunkt");
-        $this->requestService->setJsonPayload(['name' => "Jhon Doe"]);
+        $this->requestService->setJsonPayloadByArray(['name' => "Jhon Doe"]);
         $this->requestService->setMethod("GET");
         $result = $this->requestService->make();
         $body = json_decode($result['body']);
@@ -66,6 +66,6 @@ class RequestServiceTest extends TestCase
     function testNonUTF8Payload()
     {
         $this->expectException('JsonEncodeException');
-        $this->requestService->setJsonPayload(['name' => "Jhon Doe \xff"]);
+        $this->requestService->setJsonPayloadByArray(['name' => "Jhon Doe \xff"]);
     }
 }

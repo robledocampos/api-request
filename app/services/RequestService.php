@@ -75,12 +75,17 @@ class RequestService
         $this->queryString = "?".http_build_query($parameters, '', '&');
     }
 
-    public function setJsonPayload(array $payload) : void
+    public function setJsonPayloadByArray(array $payload) : void
     {
         $jsonPayload = json_encode($payload);
         if (!$jsonPayload) {
             throw new JsonEncodeException();
         }
+        $this->setJsonPayload($jsonPayload);
+    }
+
+    public function setJsonPayload(string $jsonPayload) : void
+    {
         $headers = array_merge($this->getHeaders(), ['Content-Type: application/json']);
         $this->setHeaders($headers);
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $jsonPayload);
